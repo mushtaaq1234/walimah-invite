@@ -12,6 +12,9 @@
 // v3.6 (~11:15 25 Oct, his notes on waking): his exact NM monogram (monogram.png, from "Mushtaaq nuriya.png") everywhere,
 // gold or printed, keeping its carved shading; "their son Muhammad Mushtaaq & Nuriya, daughter of Mr & Mrs Alli" (a new
 // editable line under the second name); script tails no longer clipped by the gold foil (padding with matching margins).
+// v3.7 (~12:00): the line under the second name is two lines, "daughter of" and "MR & MRS ALLI" at the same size as the
+// hosts, so the in-laws can write "son of / Mr & Mrs Fyzoo"; page 1 is pinned at the top (its printed lines sit 97 px down,
+// as baked into the glide) so lines added below never move them.
 // INVITE.build(stage, opts) adds the layers; INVITE.setTime(t) poses them. opts.mode: "render" (everything, for the MP4),
 // "clean" (the film's own parts: the web page's background video), "web" (every editable word, over that video).
 (function () {
@@ -32,12 +35,12 @@
   // every editable word and its default (the invite maker and render3.mjs use the same keys)
   const D = {
     welcome: "Welcome to the walimah of", short1: "Mushtaaq", short2: "Nuriya",
-    host: "Mr & Mrs Fyzoo", l1: "cordially invite you to the Walimah", l2: "of their son", groom: "Muhammad Mushtaaq", bride: "Nuriya", note2: "daughter of Mr & Mrs Alli",
+    host: "Mr & Mrs Fyzoo", l1: "cordially invite you to the Walimah", l2: "of their son", groom: "Muhammad Mushtaaq", bride: "Nuriya", note2a: "daughter of", note2b: "Mr & Mrs Alli",
     day: "Sunday", date: "13 December", year: "2026", time: "after Maghrib Salaah", venue1: "198 Bengal Street", venue2: "Laudium, Centurion",
     dress: "Traditional Eastern attire", rsvpby: "1 November 2026", closing: "We look forward to celebrating with you", sig: "The Fyzoo Family",
   };
   const PAGES = (v) => [
-    { bg: true, t0: T.holdIn, t1: T.p1Out, lines: [
+    { bg: true, pin: 97, t0: T.holdIn, t1: T.p1Out, lines: [
       L("ar", 40, "بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ", "", "g", "fix"),
       L("it", 21, "In the name of Allah,<br>the Most Gracious, the Most Merciful", "margin-top:-2px;line-height:1.25", "", "fix"),
       L("", 58, mono(58), "margin:14px 0 18px", "m", "fix"),
@@ -47,7 +50,8 @@
       L("sc", 50, `<span class="anchor">${v.groom}<i class="glint" style="left:92%;top:22%"></i></span>`, "margin-top:18px", "g", "", "1"),
       L("it", 46, "&amp;", "margin:-4px 0 -8px", "g"),
       L("sc", 84, `<span class="anchor">${v.bride}<i class="glint" style="left:12%;top:30%"></i><i class="glint" style="left:70%;top:62%"></i></span>`, "", "g", "", "1"),
-      L("it", 24, v.note2 || "&nbsp;", "margin-top:2px", "", "", "1"), // an empty line keeps its height, so the printed lines never move
+      L("it", 29, v.note2a || "&nbsp;", "margin-top:6px", "", "", "1"), // an empty line keeps its height
+      L("caps", 30, v.note2b || "&nbsp;", "font-weight:600;letter-spacing:.12em", "", "", "1"),
     ] },
     { t0: T.p2, t1: T.p2Out, lines: [
       L("caps", 24, v.day, "font-weight:600;letter-spacing:.34em;padding-left:.34em", "", "", "1"),
@@ -123,6 +127,7 @@
     for (const p of PAGES(v)) {
       if (!p.bg && !guest) continue;
       const el = add(board, "div", null, "page"), inner = add(el, "div", null, "inner");
+      if (p.pin) Object.assign(el.style, { justifyContent: "flex-start", paddingTop: p.pin + "px", paddingBottom: "10px" });
       let t = p.t0; const lines = [];
       for (const l of p.lines) {
         const e = add(inner, "div", null, "ln " + l.cls); e.innerHTML = l.html;
@@ -142,8 +147,8 @@
     for (const e of stage.querySelectorAll(".names .one")) fitOne(e, 820);
     for (const e of stage.querySelectorAll(".names .two")) fitTwo(e);
     for (const p of S.pages) {
-      const avail = p.el.clientHeight - 84, h = p.inner.offsetHeight; // the page's height minus its top and bottom padding
-      if (h > avail) p.inner.style.transform = `scale(${(avail / h).toFixed(3)})`;
+      const cs = getComputedStyle(p.el), avail = p.el.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom), h = p.inner.offsetHeight;
+      if (h > avail) { p.inner.style.transformOrigin = p.bg ? "50% 0" : "50% 50%"; p.inner.style.transform = `scale(${(avail / h).toFixed(3)})`; }
     }
     // the gold foil only paints inside each line's box, so give script tails and Arabic marks room (padding) without moving
     // anything (matching negative margins); the gold copies on page 1 get the same room
