@@ -11,7 +11,7 @@ html,body{margin:0;height:100%;background:#efe9e4;overflow:hidden}
 .bar.on{opacity:1;pointer-events:auto}
 .bar .btn{font-size:14px;padding:12px 14px;white-space:nowrap}
 #tap{position:fixed;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:max(9vh,env(safe-area-inset-bottom));z-index:6;cursor:pointer;background:linear-gradient(to top,rgba(40,25,20,.25),transparent 30%)}
-#tap .btn{font-size:18px;padding:16px 26px;animation:pulse 2.2s ease-in-out infinite}
+#tap .btn{font-size:min(18px,4.4vw);white-space:nowrap;padding:16px 24px;animation:pulse 2.2s ease-in-out infinite}
 @keyframes pulse{50%{transform:scale(1.05);box-shadow:0 0 0 8px rgba(168,121,44,.15)}}
 </style></head><body>
 <div id="stage"><video id="bg" src="invite-bg.mp4" poster="poster.jpg" playsinline webkit-playsinline preload="auto"></video></div>
