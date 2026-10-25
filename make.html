@@ -37,7 +37,7 @@ button.b:disabled{opacity:.5}
 <label for="tel">Your WhatsApp number</label><input id="tel" inputmode="tel" placeholder="082 123 4567"><small>Only used if you send a link instead of the video.</small>
 <details id="who"><summary>Change the invitation (in-laws, or any change)</summary>
 <small>Pick a starting point, then change anything. It's remembered on this phone. The ayahs and their meanings stay as they are.</small>
-<div class="presets"><button class="b" type="button" id="pFyzoo">Our walimah (Fyzoo)</button><button class="b" type="button" id="pAlli">The wedding (Alli)</button></div>
+<div class="presets"><button class="b" type="button" id="pFyzoo">Walimah (Fyzoo)</button><button class="b" type="button" id="pAlli">Walimah (Alli)</button></div>
 <h2>Who is inviting</h2>
 <label for="host">Hosts</label><input id="host">
 <label for="l1">Invitation, line 1</label><input id="l1">
@@ -56,10 +56,9 @@ button.b:disabled{opacity:.5}
 <label for="year">Year</label><input id="year">
 <label for="time">Time</label><input id="time">
 <label for="rsvpby">RSVP by</label><input id="rsvpby">
-<h2>Venue and dress</h2>
+<h2>Venue</h2>
 <label for="venue1">Venue, line 1</label><input id="venue1">
 <label for="venue2">Venue, line 2</label><input id="venue2">
-<label for="dress">Dress code</label><input id="dress">
 <h2>The ending</h2>
 <label for="closing">Closing words</label><input id="closing">
 <label for="sig">Signed</label><input id="sig">
@@ -75,10 +74,13 @@ button.b:disabled{opacity:.5}
 </div>
 <script src="anim3.js"></script><script src="maker-video.js"></script><script>
 const D = INVITE.D; // the same defaults as the invite itself
-const ALLI = { host: "Mr & Mrs Alli", l1: "cordially invite you to the wedding", l2: "of their daughter", groom: "Nuriya", bride: "Muhammad Mushtaaq", note2a: "son of", note2b: "Mr & Mrs Fyzoo",
-  short1: "Nuriya", short2: "Mushtaaq", welcome: "Welcome to the wedding of", day: "Saturday", date: "12 December", year: "2026", time: "", venue1: "", venue2: "", sig: "The Alli Family" };
+// v3.9 (Mushtaaq: "we not doing wedding only walima"): the Alli family's wording for the same walimah (date, time, venue unchanged)
+const ALLI = { host: "Mr & Mrs Alli", l1: "cordially invite you to the Walimah", l2: "of their daughter", groom: "Nuriya", bride: "Muhammad Mushtaaq", note2a: "son of", note2b: "Mr & Mrs Fyzoo",
+  short1: "Nuriya", short2: "Mushtaaq", sig: "The Alli Family" };
 const kept = ["rsvp", "tel", ...Object.keys(D)], all = ["to", "seats", ...kept];
 const $ = (k) => document.getElementById(k);
+// a new version of the wording clears what an earlier version remembered on this phone (v3.9: the venue name, no dress code)
+if (localStorage.getItem("walimah-ver") !== "3.9") { for (const k of Object.keys(D)) localStorage.removeItem("walimah-" + k); localStorage.removeItem("walimah-dress"); localStorage.setItem("walimah-ver", "3.9"); }
 for (const k of kept) { const v = localStorage.getItem("walimah-" + k); $(k).value = v !== null ? v : (D[k] || ""); }
 // the words for the invite: anything that differs from our walimah wording (an emptied box shows nothing)
 const words = () => { const o = {}; for (const k of all) { if (k === "tel") continue; const v = $(k).value.trim(); if (v && v !== D[k]) o[k] = v; else if (!v && D[k]) o[k] = ""; } return o; };

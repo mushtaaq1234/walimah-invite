@@ -6,7 +6,7 @@
 // same stage as the table view (no jump), live text for the in-laws; v3.4 English meanings under every Arabic line, gold floor
 // gobo, bloom, glints. v3.5 (~03:30, his last notes before sleeping): EVERYTHING editable except the ayahs, their
 // transliteration and their meanings (the curtain names and welcome, the hosts and wording, the couple's names, day, date,
-// year, time, venue, dress code, RSVP date, closing line, signature, the guest and seats); no text may ever be cut off
+// year, time, venue, RSVP date, closing line, signature, the guest and seats); no text may ever be cut off
 // (single lines shrink to fit, two-line blocks shrink to two lines, a page that is too tall scales down as a whole); flower
 // stands beside the board. Only the Bismillah, its meaning and the monogram are printed into the camera moves.
 // v3.6 (~11:15 25 Oct, his notes on waking): his exact NM monogram (monogram.png, from "Mushtaaq nuriya.png") everywhere,
@@ -30,14 +30,15 @@
   const L = (cls, px, html, style = "", gold = "", kind = "", fit = "") => ({ cls, px, html, style, gold, kind, fit });
   // the timeline: the entrance still (0-4 s), the curtains move (4-9 s), one glide to the board (9-19 s), the hold
   const HOLD = 19; // the glide ends on the board still itself, so a 2-frame blend lands it
-  const T = { inkFrom: 6.6, inkTo: 7.4, namesOut: 10.6, holdIn: HOLD - 0.08, hold: HOLD, ignite: HOLD + 0.6, p1Out: HOLD + 6.5, p2: HOLD + 7, p2Out: HOLD + 12.5, p3: HOLD + 13, p3Out: HOLD + 18.5, p4: HOLD + 19 };
+  // v3.9 pearl-white silk curtains: the names are lilac ink from the first frame (white light would not show on white silk)
+  const T = { inkFrom: -1, inkTo: -0.5, namesOut: 10.6, holdIn: HOLD - 0.08, hold: HOLD, ignite: HOLD + 0.6, p1Out: HOLD + 6.5, p2: HOLD + 7, p2Out: HOLD + 12.5, p3: HOLD + 13, p3Out: HOLD + 18.5, p4: HOLD + 19 };
   const DUR = HOLD + 26;
   // every editable word and its default (the invite maker and render3.mjs use the same keys)
   const D = {
     welcome: "Welcome to the walimah of", short1: "Mushtaaq", short2: "Nuriya",
     host: "Mr & Mrs Fyzoo", l1: "cordially invite you to the Walimah", l2: "of their son", groom: "Muhammad Mushtaaq", bride: "Nuriya", note2a: "daughter of", note2b: "Mr & Mrs Alli",
-    day: "Sunday", date: "13 December", year: "2026", time: "after Maghrib Salaah", venue1: "198 Bengal Street", venue2: "Laudium, Centurion",
-    dress: "Traditional Eastern attire", rsvpby: "1 November 2026", closing: "We look forward to celebrating with you", sig: "The Fyzoo Family",
+    day: "Sunday", date: "13 December", year: "2026", time: "after Maghrib Salaah", venue1: "The Ballroom Laudium", venue2: "198 Bengal Street, Laudium",
+    rsvpby: "1 November 2026", closing: "We look forward to celebrating with you", sig: "The Fyzoo Family",
   };
   const PAGES = (v) => [
     { bg: true, pin: 97, t0: T.holdIn, t1: T.p1Out, lines: [
@@ -66,9 +67,6 @@
       L("ar", 34, "وَخَلَقْنَاكُمْ أَزْوَاجًا"),
       L("sc", 40, "And We created you in pairs", "", "g"),
       L("caps", 14, "Surah An-Naba · 78:8", "font-weight:500;margin-top:6px;letter-spacing:.2em"),
-      L("rule", 0, "", "margin:26px 0 24px"),
-      L("caps", 20, "Dress code", "font-weight:600;letter-spacing:.3em;padding-left:.3em"),
-      L("it", 30, v.dress, "margin-top:4px;max-width:440px", "", "", "2"),
       L("rule", 0, "", "margin:26px 0 24px"),
       ...(v.seats ? [L("it", 29, "Seats reserved for you", "font-weight:600"), L("caps", 46, v.seats, "font-weight:600;line-height:1.1;margin-bottom:14px", "g", "", "1")] : []),
       L("it", 29, "Kindly RSVP by"),

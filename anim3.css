@@ -8,15 +8,16 @@
 #fx,#vig{position:absolute;inset:0;pointer-events:none}
 #vig{background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 60%,rgba(60,40,40,.14) 100%)}
 
-/* the names: projected light on the closed curtains (and the monogram on the floor), then ink with a white halo once the
-   curtains open onto the bright hall, so they stay readable the whole way in */
+/* the names: deep lilac ink with a white halo (v3.9, on pearl-white silk curtains; the bride wears lilac), readable the whole
+   way in; the glow style (projected light) is kept for darker curtains */
 #inkwrap{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:0 0;pointer-events:none}
 .names{position:absolute;inset:0;pointer-events:none}
 .names.glow{mix-blend-mode:screen}
 .names .on{position:absolute;left:0;right:0;text-align:center}
 .names.glow .on{color:rgba(255,250,246,.95);filter:blur(.5px);
   text-shadow:0 0 5px rgba(255,255,255,.95),0 0 18px rgba(255,244,240,.75),0 0 46px rgba(255,236,232,.45)}
-.names.ink .on{color:#6b3a42;text-shadow:0 0 8px rgba(255,255,255,.95),0 0 22px rgba(255,255,255,.9),0 0 48px rgba(255,255,255,.75)}
+.names.ink .on{color:#47295a;text-shadow:0 1px 2px rgba(255,255,255,.7),0 0 12px rgba(255,255,255,.55)}
+.names.ink .caps{font-weight:600}
 .names .caps{font-family:'Cinzel',serif;letter-spacing:.3em;padding-left:.3em;line-height:1.5;color:inherit}
 .names .sc{font-family:'Pinyon Script',cursive;line-height:1;color:inherit}
 .names .it{font-family:'Cormorant Garamond',serif;font-style:italic;color:inherit}

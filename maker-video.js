@@ -117,7 +117,7 @@
           for (const [o, col] of GOLD) gr.addColorStop(o, col);
           g.fillStyle = gr; g.shadowColor = "rgba(255,196,110,.6)"; g.shadowBlur = 10 * s;
         } else if (it.glow) { g.globalCompositeOperation = "screen"; g.fillStyle = "rgba(255,250,246,.95)"; g.shadowColor = "rgba(255,240,235,.9)"; g.shadowBlur = 16 * s; }
-        else if (it.ink) { g.fillStyle = "#6b3a42"; g.shadowColor = "rgba(255,255,255,.95)"; g.shadowBlur = 14 * s; }
+        else if (it.ink) { g.fillStyle = "#47295a"; g.shadowColor = "rgba(255,255,255,.6)"; g.shadowBlur = 10 * s; }
         else g.fillStyle = cs.color;
         // a single line mixing fonts (the italic "&" before Nuriya on the curtains) is drawn run by run
         const runs = [];
