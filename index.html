@@ -20,7 +20,8 @@ html,body{margin:0;height:100%;background:#efe9e4;overflow:hidden}
 <script>
 (function () {
   const q = new URLSearchParams(location.search), o = { mode: "web" };
-  for (const k of ["to", "seats", "rsvp", "host", "l1", "l2", "sig"]) if (q.has(k)) o[k] = q.get(k);
+  const D = INVITE.D, V = (k) => (q.has(k) ? q.get(k) : D[k]);
+  for (const k of ["to", "seats", "rsvp", ...Object.keys(D)]) if (q.has(k)) o[k] = q.get(k);
   const stage = document.getElementById("stage"), v = document.getElementById("bg"), tap = document.getElementById("tap");
   // phones: fill the height (the sides trim a little; everything that matters sits in the middle); wide screens: fit it all
   const fit = () => { const s = innerWidth / innerHeight < 1080 / 1920 ? innerHeight / 1920 : Math.min(innerWidth / 1080, innerHeight / 1920);
@@ -29,9 +30,9 @@ html,body{margin:0;height:100%;background:#efe9e4;overflow:hidden}
   // after the film: RSVP to whoever sent it, directions, play again
   const tel = (q.get("tel") || "").replace(/[^0-9]/g, "").replace(/^0/, "27");
   const bar = document.createElement("div"); bar.className = "bar";
-  if (tel) { const msg = "Assalamu alaikum. " + (o.to || "We") + " would love to attend the walimah of Muhammed Mushtaaq & Nuriya on Sunday 13 December" + (o.seats ? " (" + o.seats + " seats)" : "") + ", insha Allah.";
+  if (tel) { const msg = "Assalamu alaikum. " + (o.to || "We") + " would love to attend the walimah of " + V("groom") + " & " + V("bride") + " on " + V("day") + " " + V("date") + (o.seats ? " (" + o.seats + " seats)" : "") + ", insha Allah.";
     bar.innerHTML += '<a class="btn main" href="https://wa.me/' + tel + "?text=" + encodeURIComponent(msg) + '">RSVP</a>'; }
-  bar.innerHTML += '<a class="btn" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent("198 Bengal Street, Laudium, Centurion, 0037") + '" target="_blank" rel="noopener">Directions</a><button class="btn" id="again">Play again</button>';
+  bar.innerHTML += '<a class="btn" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(V("venue1") + ", " + V("venue2")) + '" target="_blank" rel="noopener">Directions</a><button class="btn" id="again">Play again</button>';
   document.body.appendChild(bar);
   v.addEventListener("ended", () => bar.classList.add("on"));
   // the guest taps to open (that tap lets the music play), then the words follow the film's clock

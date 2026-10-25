@@ -25,18 +25,38 @@ a.wa{background:#a8792c;color:#fffaf0}
 <h2>You (asked once, remembered on this phone)</h2>
 <label for="rsvp">Your name</label><input id="rsvp" placeholder="Famida Fyzoo"><small>Shown as "Kindly RSVP by 1 November 2026 to ...".</small>
 <label for="tel">Your WhatsApp number</label><input id="tel" inputmode="tel" placeholder="082 123 4567"><small>The guest's RSVP button opens a WhatsApp chat with you.</small>
-<details id="who"><summary>Who is inviting (change this for the in-laws)</summary>
+<details id="who"><summary>Change the invitation (in-laws, or any change)</summary>
+<small>Everything you change here is remembered on this phone. The ayahs and their meanings stay as they are.</small>
+<h2>Who is inviting</h2>
 <label for="host">Hosts</label><input id="host">
 <label for="l1">Invitation, line 1</label><input id="l1">
 <label for="l2">Invitation, line 2</label><input id="l2">
+<h2>The couple</h2>
+<label for="groom">First name on the board</label><input id="groom">
+<label for="bride">Second name on the board</label><input id="bride">
+<label for="short1">First name on the curtains</label><input id="short1">
+<label for="short2">Second name on the curtains</label><input id="short2">
+<label for="welcome">Words above the names on the curtains</label><input id="welcome">
+<h2>Date and time</h2>
+<label for="day">Day</label><input id="day">
+<label for="date">Date</label><input id="date">
+<label for="year">Year</label><input id="year">
+<label for="time">Time</label><input id="time">
+<label for="rsvpby">RSVP by</label><input id="rsvpby">
+<h2>Venue and dress</h2>
+<label for="venue1">Venue, line 1</label><input id="venue1">
+<label for="venue2">Venue, line 2</label><input id="venue2"><small>The guest's Directions button searches for these two lines.</small>
+<label for="dress">Dress code</label><input id="dress">
+<h2>The ending</h2>
+<label for="closing">Closing words</label><input id="closing">
 <label for="sig">Signed</label><input id="sig">
-<button class="reset" id="reset" type="button">Put back the Fyzoo wording</button>
+<button class="reset" id="reset" type="button">Put back the original wording</button>
 </details>
 <div class="btns"><a class="b wa" id="send" href="#">Send on WhatsApp</a><a class="b" id="view" href="#" target="_blank">Preview the invite</a><button class="b" id="copy">Copy the link</button></div>
 <div id="ok"></div>
-</div><script>
-const D = { host: "Mr & Mrs Fyzoo", l1: "cordially invite you to the Walimah", l2: "of their son", sig: "The Fyzoo Family" };
-const kept = ["rsvp", "tel", "host", "l1", "l2", "sig"], all = ["to", "seats", ...kept];
+</div><script src="anim3.js"></script><script>
+const D = INVITE.D; // the same defaults as the invite itself
+const kept = ["rsvp", "tel", ...Object.keys(D)], all = ["to", "seats", ...kept];
 const $ = (k) => document.getElementById(k);
 for (const k of kept) { const v = localStorage.getItem("walimah-" + k); $(k).value = v !== null ? v : (D[k] || ""); }
 const link = () => { const u = new URL("index.html", location.href);
@@ -44,9 +64,10 @@ const link = () => { const u = new URL("index.html", location.href);
   return u.toString(); };
 const upd = () => { for (const k of kept) localStorage.setItem("walimah-" + k, $(k).value.trim());
   const to = $("to").value.trim();
-  const msg = "Assalamu alaikum" + (to ? " " + to : "") + ". With great joy we invite you to the walimah of Muhammed Mushtaaq & Nuriya on Sunday 13 December 2026, after Maghrib, in Laudium. Tap to open your invitation: " + link();
+  const f = (k) => $(k).value.trim() || D[k];
+  const msg = "Assalamu alaikum" + (to ? " " + to : "") + ". With great joy we invite you to the walimah of " + f("groom") + " & " + f("bride") + " on " + f("day") + " " + f("date") + " " + f("year") + ", " + f("time") + ", at " + f("venue1") + ", " + f("venue2") + ". Tap to open your invitation: " + link();
   $("send").href = "https://wa.me/?text=" + encodeURIComponent(msg); $("view").href = link(); };
 all.forEach((k) => $(k).addEventListener("input", upd)); upd();
-$("reset").onclick = () => { for (const k of ["host", "l1", "l2", "sig"]) $(k).value = D[k]; upd(); };
+$("reset").onclick = () => { for (const k of Object.keys(D)) $(k).value = D[k]; upd(); };
 $("copy").onclick = async () => { const ok = $("ok"); try { await navigator.clipboard.writeText(link()); ok.textContent = "Link copied."; } catch (e) { ok.textContent = link(); } ok.style.display = "block"; };
 </script></body></html>
