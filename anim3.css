@@ -64,3 +64,9 @@
 /* v3.5: a page's lines sit in .inner, which scales down as a whole if a long entry makes the page too tall */
 .inner{width:100%;display:flex;flex-direction:column;align-items:center;transform-origin:50% 50%}
 .anchor{position:relative;display:inline-block}
+
+/* v3.6: his NM monogram from monogram.png. The image is the mask; its own carved shading is multiplied onto the colour */
+.monoimg{display:inline-block;vertical-align:middle;-webkit-mask:url(monogram.png) center/contain no-repeat;mask:url(monogram.png) center/contain no-repeat;
+  background:url(monogram.png) center/contain no-repeat,#6a625c;background-blend-mode:multiply}
+.goldm .monoimg,.gover.goldm .monoimg,#floor .gm .monoimg{background:url(monogram.png) center/contain no-repeat,linear-gradient(135deg,#6b4b14 0%,#a97c2c 35%,#e2c071 52%,#b88a35 68%,#6b4b14 100%);background-blend-mode:multiply}
+#floor .gm .monoimg{filter:drop-shadow(0 0 4px rgba(255,214,140,.95)) drop-shadow(0 0 16px rgba(255,196,110,.7))}

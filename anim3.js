@@ -9,6 +9,9 @@
 // year, time, venue, dress code, RSVP date, closing line, signature, the guest and seats); no text may ever be cut off
 // (single lines shrink to fit, two-line blocks shrink to two lines, a page that is too tall scales down as a whole); flower
 // stands beside the board. Only the Bismillah, its meaning and the monogram are printed into the camera moves.
+// v3.6 (~11:15 25 Oct, his notes on waking): his exact NM monogram (monogram.png, from "Mushtaaq nuriya.png") everywhere,
+// gold or printed, keeping its carved shading; "their son Muhammad Mushtaaq & Nuriya, daughter of Mr & Mrs Alli" (a new
+// editable line under the second name); script tails no longer clipped by the gold foil (padding with matching margins).
 // INVITE.build(stage, opts) adds the layers; INVITE.setTime(t) poses them. opts.mode: "render" (everything, for the MP4),
 // "clean" (the film's own parts: the web page's background video), "web" (every editable word, over that video).
 (function () {
@@ -17,7 +20,8 @@
   const inout = (x) => { x = clamp(x); return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
   const out3 = (x) => 1 - Math.pow(1 - clamp(x), 3);
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
-  const mono = (px) => `<span class="mono" style="font-size:${px}px"><span class="m">M</span><span class="n" style="font-size:.86em;left:-.2em;top:.1em">N</span></span>`;
+  // his NM monogram (monogram.png, 900 x 599): the image is the mask, its own shading multiplied onto the colour or the gold
+  const mono = (px) => `<span class="monoimg" style="height:${px}px;width:${(px * 1.5025).toFixed(1)}px"></span>`;
   // a line: kind "fix" (part of the film; printed into the camera moves on page 1) or editable; gold "g" foil, "m" gold monogram;
   // fit: "1" one line that shrinks to fit the width, "2" a block that shrinks to fit two lines
   const L = (cls, px, html, style = "", gold = "", kind = "", fit = "") => ({ cls, px, html, style, gold, kind, fit });
@@ -28,7 +32,7 @@
   // every editable word and its default (the invite maker and render3.mjs use the same keys)
   const D = {
     welcome: "Welcome to the walimah of", short1: "Mushtaaq", short2: "Nuriya",
-    host: "Mr & Mrs Fyzoo", l1: "cordially invite you to the Walimah", l2: "of their son", groom: "Muhammed Mushtaaq", bride: "Nuriya",
+    host: "Mr & Mrs Fyzoo", l1: "cordially invite you to the Walimah", l2: "of their son", groom: "Muhammad Mushtaaq", bride: "Nuriya", note2: "daughter of Mr & Mrs Alli",
     day: "Sunday", date: "13 December", year: "2026", time: "after Maghrib Salaah", venue1: "198 Bengal Street", venue2: "Laudium, Centurion",
     dress: "Traditional Eastern attire", rsvpby: "1 November 2026", closing: "We look forward to celebrating with you", sig: "The Fyzoo Family",
   };
@@ -43,6 +47,7 @@
       L("sc", 50, `<span class="anchor">${v.groom}<i class="glint" style="left:92%;top:22%"></i></span>`, "margin-top:18px", "g", "", "1"),
       L("it", 46, "&amp;", "margin:-4px 0 -8px", "g"),
       L("sc", 84, `<span class="anchor">${v.bride}<i class="glint" style="left:12%;top:30%"></i><i class="glint" style="left:70%;top:62%"></i></span>`, "", "g", "", "1"),
+      L("it", 24, v.note2 || "&nbsp;", "margin-top:2px", "", "", "1"), // an empty line keeps its height, so the printed lines never move
     ] },
     { t0: T.p2, t1: T.p2Out, lines: [
       L("caps", 24, v.day, "font-weight:600;letter-spacing:.34em;padding-left:.34em", "", "", "1"),
@@ -139,6 +144,17 @@
     for (const p of S.pages) {
       const avail = p.el.clientHeight - 84, h = p.inner.offsetHeight; // the page's height minus its top and bottom padding
       if (h > avail) p.inner.style.transform = `scale(${(avail / h).toFixed(3)})`;
+    }
+    // the gold foil only paints inside each line's box, so give script tails and Arabic marks room (padding) without moving
+    // anything (matching negative margins); the gold copies on page 1 get the same room
+    for (const e of board.querySelectorAll(".gold")) {
+      const fs = parseFloat(getComputedStyle(e).fontSize), cs = getComputedStyle(e), t = fs * 0.15, b = fs * 0.42;
+      e.style.paddingTop = t + "px"; e.style.paddingBottom = b + "px";
+      e.style.marginTop = (parseFloat(cs.marginTop) - t) + "px"; e.style.marginBottom = (parseFloat(cs.marginBottom) - b) + "px";
+    }
+    for (const o of board.querySelectorAll(".gover")) {
+      const fs = parseFloat(getComputedStyle(o.parentElement).fontSize), t = fs * 0.3, b = fs * 0.5;
+      Object.assign(o.style, { top: -t + "px", bottom: -b + "px", paddingTop: t + "px", paddingBottom: b + "px" });
     }
     S.golds = [...board.querySelectorAll(".gold")];
     S.glints = guest ? [...board.querySelectorAll(".glint")].map((g, i) => ({ g, ph: [0, 1.7, 3.1][i % 3] })) : [];
