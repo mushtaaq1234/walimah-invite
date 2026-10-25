@@ -1,0 +1,46 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E">
+<title>You're invited: the Walimah of Muhammed Mushtaaq & Nuriya</title><meta property="og:title" content="You're invited: the Walimah of Muhammed Mushtaaq & Nuriya"><meta property="og:description" content="Sunday 13 December 2026, after Maghrib Salaah, Laudium. Tap to open your invitation.">
+<meta property="og:image" content="https://mushtaaq1234.github.io/walimah-invite/preview.jpg"><meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;600&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Cinzel:wght@400;500;600&family=Playfair+Display&display=block" rel="stylesheet"><link rel="stylesheet" href="anim3.css">
+<style>
+html,body{margin:0;height:100%;background:#efe9e4;overflow:hidden}
+#stage{position:fixed;left:50%;top:50%;transform-origin:0 0}
+.btn{font:600 16px/1 'Cormorant Garamond',serif;letter-spacing:.08em;text-transform:uppercase;color:#4a403a;background:rgba(253,251,246,.95);border:1px solid #c9a14a;border-radius:999px;padding:13px 20px;text-decoration:none;cursor:pointer}
+.btn.main{background:#a8792c;color:#fffaf0;border-color:#a8792c}
+.bar{position:fixed;left:0;right:0;bottom:max(18px,env(safe-area-inset-bottom));display:flex;gap:10px;justify-content:center;opacity:0;pointer-events:none;transition:opacity .8s;z-index:5}
+.bar.on{opacity:1;pointer-events:auto}
+.bar .btn{font-size:14px;padding:12px 14px;white-space:nowrap}
+#tap{position:fixed;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:max(9vh,env(safe-area-inset-bottom));z-index:6;cursor:pointer;background:linear-gradient(to top,rgba(40,25,20,.25),transparent 30%)}
+#tap .btn{font-size:18px;padding:16px 26px;animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.05);box-shadow:0 0 0 8px rgba(168,121,44,.15)}}
+</style></head><body>
+<div id="stage"><video id="bg" src="invite-bg.mp4" poster="poster.jpg" playsinline webkit-playsinline preload="auto"></video></div>
+<div id="tap"><span class="btn main">Tap to open your invitation</span></div>
+<script src="anim3.js"></script>
+<script>
+(function () {
+  const q = new URLSearchParams(location.search), o = { mode: "web" };
+  for (const k of ["to", "seats", "rsvp", "host", "l1", "l2", "sig"]) if (q.has(k)) o[k] = q.get(k);
+  const stage = document.getElementById("stage"), v = document.getElementById("bg"), tap = document.getElementById("tap");
+  // phones: fill the height (the sides trim a little; everything that matters sits in the middle); wide screens: fit it all
+  const fit = () => { const s = innerWidth / innerHeight < 1080 / 1920 ? innerHeight / 1920 : Math.min(innerWidth / 1080, innerHeight / 1920);
+    stage.style.transform = "translate(" + (-540 * s) + "px," + (-960 * s) + "px) scale(" + s + ")"; };
+  fit(); addEventListener("resize", fit);
+  // after the film: RSVP to whoever sent it, directions, play again
+  const tel = (q.get("tel") || "").replace(/[^0-9]/g, "").replace(/^0/, "27");
+  const bar = document.createElement("div"); bar.className = "bar";
+  if (tel) { const msg = "Assalamu alaikum. " + (o.to || "We") + " would love to attend the walimah of Muhammed Mushtaaq & Nuriya on Sunday 13 December" + (o.seats ? " (" + o.seats + " seats)" : "") + ", insha Allah.";
+    bar.innerHTML += '<a class="btn main" href="https://wa.me/' + tel + "?text=" + encodeURIComponent(msg) + '">RSVP</a>'; }
+  bar.innerHTML += '<a class="btn" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent("198 Bengal Street, Laudium, Centurion, 0037") + '" target="_blank" rel="noopener">Directions</a><button class="btn" id="again">Play again</button>';
+  document.body.appendChild(bar);
+  v.addEventListener("ended", () => bar.classList.add("on"));
+  // the guest taps to open (that tap lets the music play), then the words follow the film's clock
+  const start = () => { tap.style.display = "none"; v.muted = false; const p = v.play(); if (p && p.catch) p.catch(() => { v.muted = true; v.play(); }); };
+  tap.onclick = start;
+  document.getElementById("again").onclick = () => { bar.classList.remove("on"); v.currentTime = 0; start(); };
+  Promise.all(["26px 'Scheherazade New'", "40px 'Pinyon Script'", "italic 500 20px 'Cormorant Garamond'", "italic 600 20px 'Cormorant Garamond'", "600 16px Cinzel", "500 16px Cinzel", "60px 'Playfair Display'"].map((f) => document.fonts.load(f, "بسم Mushtaaq M"))).catch(() => {}).then(() => {
+    INVITE.build(stage, o);
+    requestAnimationFrame(function tick() { INVITE.setTime(v.currentTime || 0); requestAnimationFrame(tick); });
+  });
+})();
+</script></body></html>

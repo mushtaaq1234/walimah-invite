@@ -1,0 +1,62 @@
+/* Walima invite v3 (2026-10-25): the projected welcome on the curtains and the black invitation on the glossy board, after
+   the BYMIRFY ballroom reel. Shared by render3.html (the MP4) and the web page. Frame 1080 x 1920. */
+*{margin:0;padding:0;box-sizing:border-box}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#f3eee9}
+#bg{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover;display:block}
+.still{position:absolute;left:0;top:-7.5px;width:1080px;height:1935px;display:block}
+#w1,#w4{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:0 0}
+#fx,#vig{position:absolute;inset:0;pointer-events:none}
+#vig{background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 60%,rgba(60,40,40,.14) 100%)}
+
+/* the names: projected light on the closed curtains (and the monogram on the floor), then ink with a white halo once the
+   curtains open onto the bright hall, so they stay readable the whole way in */
+#inkwrap{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:0 0;pointer-events:none}
+.names{position:absolute;inset:0;pointer-events:none}
+.names.glow{mix-blend-mode:screen}
+.names .on{position:absolute;left:0;right:0;text-align:center}
+.names.glow .on{color:rgba(255,250,246,.95);filter:blur(.5px);
+  text-shadow:0 0 5px rgba(255,255,255,.95),0 0 18px rgba(255,244,240,.75),0 0 46px rgba(255,236,232,.45)}
+.names.ink .on{color:#6b3a42;text-shadow:0 0 8px rgba(255,255,255,.95),0 0 22px rgba(255,255,255,.9),0 0 48px rgba(255,255,255,.75)}
+.names .caps{font-family:'Cinzel',serif;letter-spacing:.3em;padding-left:.3em;line-height:1.5;color:inherit}
+.names .sc{font-family:'Pinyon Script',cursive;line-height:1;color:inherit}
+.names .it{font-family:'Cormorant Garamond',serif;font-style:italic;color:inherit}
+/* the floor gobo: gold monogram light inside a double ring, lying on the floor in perspective, turning very slowly */
+#floor{position:absolute;left:190px;top:1450px;width:700px;height:500px;pointer-events:none;transform:perspective(760px) rotateX(63deg);transform-origin:50% 50%}
+#floor>*{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(var(--spin,0deg))}
+#floor .pool{width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(255,222,160,.55) 0%,rgba(255,214,150,.28) 45%,rgba(255,214,150,0) 70%)}
+#floor .ring{width:420px;height:420px;border-radius:50%;border:3px solid rgba(190,140,55,.9);box-shadow:0 0 18px rgba(255,200,110,.8),inset 0 0 18px rgba(255,200,110,.6)}
+#floor .ring.r2{width:384px;height:384px;border-width:1.5px}
+#floor .gm .mono{color:#b07f2a;filter:drop-shadow(0 0 4px rgba(255,214,140,.95)) drop-shadow(0 0 16px rgba(255,196,110,.7))}
+#floor .gm .mono .n{color:#c79a45}
+#bloom{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 50% 42%,rgba(255,252,246,1) 0%,rgba(255,248,240,.7) 50%,rgba(255,244,236,.3) 100%)}
+.glint{position:absolute;width:34px;height:34px;opacity:0;pointer-events:none;background:
+  radial-gradient(circle,rgba(255,250,230,1) 0%,rgba(255,236,180,.9) 12%,rgba(255,220,150,0) 40%),
+  linear-gradient(90deg,transparent 46%,rgba(255,244,210,.95) 50%,transparent 54%),
+  linear-gradient(0deg,transparent 46%,rgba(255,244,210,.95) 50%,transparent 54%)}
+
+/* the board: the glossy panel's inner gold frame in s4c-board-close.png (left 293.2, top 487.5, 537.2 x 885.9 in the 1080-wide
+   frame), laid out at the earlier board's 490.8 px width and scaled up to fit, so the type sizes carry over */
+#board{position:absolute;left:293.2px;top:487.5px;width:490.8px;height:809.4px;transform:scale(1.0945);transform-origin:0 0}
+.page{position:absolute;inset:0;padding:24px 22px 60px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:0}
+.ln{display:block;white-space:nowrap}
+.wrap{white-space:normal}
+.ar{font-family:'Scheherazade New',serif;direction:rtl;color:#1d1916;line-height:1.7}
+.caps{font-family:'Cinzel',serif;letter-spacing:.14em;color:#1d1916}
+.it{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;color:#1f1a17}
+.sc{font-family:'Pinyon Script',cursive;color:#141110;line-height:1.05}
+.soft{color:#6d625b}
+.rule{width:120px;height:1px;background:#8d8178;position:relative}
+.rule:after{content:"";position:absolute;left:50%;top:-3px;width:6px;height:6px;margin-left:-3px;transform:rotate(45deg);background:#8d8178}
+
+/* the M N monogram from the family's card: a tall high-contrast M with a script N crossing it */
+.mono{position:relative;display:inline-block}
+.mono .m{font-family:'Playfair Display',serif;font-weight:400;line-height:1}
+.mono .n{font-family:'Pinyon Script',cursive;position:absolute;line-height:1}
+#board .mono{color:#5f5853}
+
+/* the gold foil (v3.2): a warm metallic gradient clipped to the letters, a soft glow, a light band that sweeps across */
+.gold{background:linear-gradient(100deg,#6b4b14 0%,#94691f 34%,#c49a45 46%,#e2c071 50%,#c49a45 54%,#94691f 66%,#6b4b14 100%);
+  background-size:260% 100%;background-position:115% 0;-webkit-background-clip:text;background-clip:text;color:transparent!important}
+.gover{position:absolute;left:0;right:0;top:0;bottom:0;opacity:0;filter:drop-shadow(0 0 3px rgba(255,214,140,.9)) drop-shadow(0 0 12px rgba(255,196,110,.55))}
+.goldm .mono,.gover.goldm .mono{color:#a97c2c}
+.gover.goldm{background:none}
