@@ -27,6 +27,7 @@ button.b:disabled{opacity:.5}
 #ok{display:none;text-align:center;font-style:italic;margin-top:8px;word-break:break-all}
 .alt{margin-top:22px;text-align:center;font-size:17px}.alt a,.alt button{color:#8a6a3a;background:none;border:0;font:italic 17px 'Cormorant Garamond',serif;text-decoration:underline;cursor:pointer;padding:4px 6px}
 .reset{background:none;border:0;color:#8a6a3a;font:italic 16px 'Cormorant Garamond',serif;text-decoration:underline;cursor:pointer;padding:6px 0}
+.hd{text-align:center;margin-top:12px;font-size:18px;font-style:normal;color:#5a4a3c}.hd b{color:#8a6420}
 </style></head><body><div class="w">
 <h1>Mushtaaq &amp; Nuriya</h1><p class="s">Make an invite for a guest</p>
 <h2>The guest</h2>
@@ -67,12 +68,14 @@ button.b:disabled{opacity:.5}
 </details>
 <div class="btns"><a class="b" id="view" href="#" target="_blank">Preview the invite</a><button class="b wa" id="make">Make the video</button></div>
 <div id="progress">Making the video... keep this screen open<div id="bar"><i></i></div><span id="pct">0 s of 45</span></div>
+<small class="warn" id="err" style="display:none;text-align:center;margin-top:12px"></small>
 <div id="result"><video id="out" controls playsinline></video>
-<div class="btns"><button class="b wa" id="share">Send the video on WhatsApp</button><a class="b" id="save" download>Save the video to this phone</a></div></div>
+<div class="btns"><button class="b wa" id="share">Send the video on WhatsApp</button><a class="b" id="save" download>Save the video to this phone</a></div>
+<small class="hd">In WhatsApp, tap <b>HD</b> at the top before you send, so your guest gets the sharp version.</small></div>
 <div class="alt">Or <a id="send" href="#">send a link instead</a> · <button id="copy">copy the link</button></div>
 <div id="ok"></div>
 </div>
-<script src="anim3.js"></script><script src="maker-video.js"></script><script>
+<script src="anim3.js"></script><script src="mp4-muxer.js"></script><script src="maker-video.js"></script><script>
 const D = INVITE.D; // the same defaults as the invite itself
 // v3.9 (Mushtaaq: "we not doing wedding only walima"): the Alli family's wording for the same walimah (date, time, venue unchanged)
 const ALLI = { host: "Mr & Mrs Alli", l1: "cordially invite you to the Walimah", l2: "of their daughter", groom: "Nuriya", bride: "Muhammad Mushtaaq", note2a: "son of", note2b: "Mr & Mrs Fyzoo",
@@ -99,7 +102,7 @@ $("copy").onclick = async () => { const ok = $("ok"); try { await navigator.clip
 let file = null;
 $("make").onclick = async () => {
   MAKER.prime(); // inside the tap, so the music can be recorded
-  $("make").disabled = true; $("result").style.display = "none"; $("progress").style.display = "block";
+  $("make").disabled = true; $("result").style.display = "none"; $("err").style.display = "none"; $("progress").style.display = "block";
   try {
     const r = await MAKER.record(words(), (p) => { $("bar").firstChild.style.width = (p * 100).toFixed(0) + "%"; $("pct").textContent = Math.round(p * INVITE.DUR) + " s of " + INVITE.DUR; });
     const to = $("to").value.trim() || "guest";
@@ -107,7 +110,7 @@ $("make").onclick = async () => {
     const url = URL.createObjectURL(r.blob); $("out").src = url; $("save").href = url; $("save").download = file.name;
     $("share").style.display = navigator.canShare && navigator.canShare({ files: [file] }) ? "block" : "none";
     $("result").style.display = "block"; $("progress").style.display = "none"; $("result").scrollIntoView({ behavior: "smooth" });
-  } catch (e) { $("progress").textContent = "Sorry, that didn't work: " + e.message; }
+  } catch (e) { $("progress").style.display = "none"; $("err").textContent = "Sorry, that didn't work (" + e.message + "). Please tap Make the video again."; $("err").style.display = "block"; }
   $("make").disabled = false;
 };
 $("share").onclick = async () => { try { await navigator.share({ files: [file], text: message() }); } catch (e) {} };
